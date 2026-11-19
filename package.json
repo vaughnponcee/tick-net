@@ -1,0 +1,13 @@
+{
+  "name": "tick-net",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=23.6" },
+  "scripts": {
+    "start": "node build.mjs && node bin/server.ts",
+    "test": "node --test \"test/*.test.ts\"",
+    "bench": "node bench/bench.ts",
+    "build": "node build.mjs"
+  }
+}

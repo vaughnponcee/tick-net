@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+out/
+reports/
+*.jsonl
+
+# sample inputs are committed on purpose
+!examples/**
+!tests/fixtures/**
+
+# node
+node_modules/
+dist/
