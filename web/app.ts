@@ -8,11 +8,15 @@ import { ClientCore, type Mode } from "../src/client.ts";
 import { Link, PRESETS, type LinkConfig } from "../src/linksim.ts";
 import { decodeServer, encode, type ServerMsg } from "../src/protocol.ts";
 import { ARENA, RADIUS, TICK_HZ } from "../src/sim.ts";
+import { connectLocal, type SocketLike } from "./local.ts";
+
+// served by bin/server.ts: use its WebSocket. Anywhere else (static hosting): run the server in the page.
+const LOCAL = new URLSearchParams(location.search).has("local") || !/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(location.host);
 
 interface Panel {
   mode: Mode;
   core: ClientCore;
-  ws: WebSocket;
+  ws: WebSocket | SocketLike;
   up: Link<string>;
   down: Link<string>;
   canvas: HTMLCanvasElement;
@@ -33,13 +37,13 @@ function makePanel(mode: Mode, el: string, seed: number): Panel {
   canvas.width = ARENA.w;
   canvas.height = ARENA.h;
   const core = new ClientCore(mode, 100);
-  const ws = new WebSocket(`ws://${location.host}/ws`);
+  const ws: WebSocket | SocketLike = LOCAL ? connectLocal() : new WebSocket(`ws://${location.host}/ws`);
   const p: Panel = {
     mode, core, ws, up: new Link(cfg, seed), down: new Link(cfg, seed + 99), canvas,
     ctx: canvas.getContext("2d") as CanvasRenderingContext2D,
     info: document.getElementById(el + "-info") as HTMLElement, serverMe: null, trail: [],
   };
-  ws.onmessage = (ev) => p.down.send(performance.now(), ev.data as string);
+  ws.onmessage = (ev: { data: unknown }) => p.down.send(performance.now(), ev.data as string);
   return p;
 }
 

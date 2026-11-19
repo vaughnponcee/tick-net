@@ -4,7 +4,7 @@ import { stripTypeScriptTypes } from "node:module";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const files = ["src/sim.ts", "src/protocol.ts", "src/linksim.ts", "src/client.ts", "web/app.ts"];
+const files = ["src/sim.ts", "src/protocol.ts", "src/linksim.ts", "src/client.ts", "src/server.ts", "web/local.ts", "web/app.ts"];
 for (const f of files) {
   let js = stripTypeScriptTypes(readFileSync(f, "utf8"), { mode: "strip" });
   js = js.replace(/(from\s+["'][^"']+)\.ts(["'])/g, "$1.js$2");
